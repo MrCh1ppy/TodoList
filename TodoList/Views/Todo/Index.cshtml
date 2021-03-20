@@ -1,0 +1,42 @@
+﻿@using Humanizer
+@model TodoViewModel
+<!--在这里设置了Model-->
+<!--下方的语句类似于提前将网页的名称定义好,用于显示-->
+<!--ViewData将网页需要的内容进行分门别类的保存以调用-->
+<!--在Nuget内部添加包的后缀名需要为.core-->
+@{
+    ViewData["Title"] = "Manage your todo list";
+}
+
+<div class="panel panel-default todo-panel">
+    <div class="panel-heading">
+        @ViewData["Title"]
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <td>&#x2714;</td>
+            <td>Item</td>
+            <td>Due</td>
+        </tr>
+        </thead>
+        @foreach (var item in Model.Items) {
+            <tr>
+                <td>
+                    <input type="checkbox" class="done-checkbox">
+                </td>
+                <td>@item.Title</td>
+                <td>@item.DueAt.Humanize()</td>
+            </tr>
+        }
+    </table>
+    <div class="panel-footer add-item-form">
+        @await Html.PartialAsync("AddItemPartial",new TodoItem())
+        <!--参考资料:https://docs.microsoft.com/zh-cn/aspnet/core/mvc/views/partial?view=aspnetcore-5.0
+        这是一个异步的部分视图,await可能是对于异步调用的一种标识符
+        大概是从这里面直接获取字符串,然后提交给model用于创建模型,但是只凭一个属性如何创建模型,这个new 的模型由该如何加工?
+        答:这是一个被称为"模型绑定"的处理过程,asp.net core会试图自动将输入的表单内容与对应的模型绑定起来,自动输入对应字段的内容,
+        即,将这个部分视图里面form的内容传递到那个新创建的TodoItem中.在AddItemPartial视图中有更详细的描述.
+        -->
+    </div>
+</div>

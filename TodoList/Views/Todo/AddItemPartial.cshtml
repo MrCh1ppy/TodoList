@@ -1,0 +1,26 @@
+﻿@model TodoItem
+
+<!--这是一个局部视图(Partial View),用以描述Index内部的一个表单(一个大视图中的一小部分),在Rider中有单独的创建方法
+对于Razor的感想:
+实际上目前看到的功能和平常的html标签并没有什么区别,只是单纯地加上了asp
+可能asp-action会只在当前目录下寻找,待证实
+bottom也比较可以,那个type没有补全, 不知道是不是冗余的属性
+
+AddItem:出现了飘红,可能是后续的页面还没有编辑,看来这个asp-action确实可以补全Url
+-->
+
+<!--模型绑定:
+通过上方的@model得知这个form预期的服务对象为:TodoItem
+通过input上面的"Title"标签,得知其输入内容的预期位置为TodoItem.Title
+其他没有匹配上的数据都会变成一个空值,需要后期加工
+
+心得:一个(局部)页面,最好只有一个输入框,且只产出一个对象,或者两个不重名的对象
+那么如果硬有呢?
+使用绑定模型作为中介,只获取需要的数据,随后和正常的数据进行再次赋值,可以将绑定模型的属性值改变成不同的,以此解耦
+或者为输入框单独绑定一个单独的模型,然后用这个模型,对于多个模型进行赋值
+-->
+<form asp-action="AddItem" method="POST">
+    <label asp-for="Title">Add a new item:</label>
+    <input asp-for="Title">
+    <button type="submit">Add</button>
+</form>
