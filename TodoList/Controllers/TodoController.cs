@@ -14,10 +14,12 @@ namespace TodoList.Controllers {
     public class TodoController : Controller {
 
         private readonly ITodoItemService _todoItemService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
         /*Application需要自己另外继承IdentityUser类在模型文件夹新建一个*/
+        /*ApplicationUser使这个控制器无法被激活*/
+        /*解决方法:直接将Application用IdentityUser代替*/
 
-        public TodoController(ITodoItemService todoItemService,UserManager<ApplicationUser> userManager) {
+        public TodoController(ITodoItemService todoItemService,UserManager<IdentityUser> userManager) {
             _todoItemService = todoItemService;
             _userManager = userManager;
         }

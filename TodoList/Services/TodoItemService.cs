@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TodoList.Data;
 using TodoList.Models;
@@ -13,7 +14,7 @@ namespace TodoList.Services {
             _context = context;
         }
 
-        public async Task<TodoItem[]> GetIncompleteItemsAsync(ApplicationUser user) {
+        public async Task<TodoItem[]> GetIncompleteItemsAsync(IdentityUser user) {
             var items = await _context.Items.Where(x => x.IsDone == false&&x.UserId==user.Id).ToArrayAsync();
             /*创建一个匿名对象数组Items用于存储数据
             异步执行LINQ的查询语句,随后将查询的结果集用ToArray中线程安全的方法封装成一个数组
@@ -24,7 +25,7 @@ namespace TodoList.Services {
             return items;
         }
 
-        public async Task<bool> AddItemAsync(TodoItem newItem,ApplicationUser user) {
+        public async Task<bool> AddItemAsync(TodoItem newItem,IdentityUser user) {
             newItem.Id=Guid.NewGuid();//这个类型可以直接获取一个不带重复的版本号
             newItem.DueAt = DateTimeOffset.Now.AddDays(5);//获取当前时间,随后加5
             newItem.IsDone = false;
@@ -40,7 +41,7 @@ namespace TodoList.Services {
             return saveResult == 1;
         }
 
-        public async Task<bool> MarkDoneAsync(Guid id,ApplicationUser user) {
+        public async Task<bool> MarkDoneAsync(Guid id,IdentityUser user) {
             /*在数据库中LINQ进行查找,获取结果集*/
             var item = await _context.Items
                 .Where(x => x.Id == id&&x.UserId==user.Id)
