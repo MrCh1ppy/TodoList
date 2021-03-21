@@ -1,20 +1,38 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TodoList.Models;
 using TodoList.Services;
 
 namespace TodoList.Controllers {
+    /*这个属性要求用户在执行操作之前需要登陆过
+     在没登录时定位到Todo会自动定向到登录界面*/
+    
+    [Authorize]
     public class TodoController : Controller {
 
         private readonly ITodoItemService _todoItemService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        /*Application需要自己另外继承IdentityUser类在模型文件夹新建一个*/
 
-        public TodoController(ITodoItemService todoItemService) {
+        public TodoController(ITodoItemService todoItemService,UserManager<ApplicationUser> userManager) {
             _todoItemService = todoItemService;
+            _userManager = userManager;
         }
-        // GET
+
         public async Task<IActionResult> Index() {
+            var currentUser = await _userManager.GetUserAsync(User);
+            /*.GetUserAsync方法可以直接从属性"User"中获取当前的用户的一些信息,然后依据这些信息,在数据库中查到这个用户的信息
+             User:用于存储当前网页上用户的信息
+             */
+            if (null == currentUser) {
+                return Challenge();
+                /*Challenge:重新登录*/
+            }
             /*这个IActionResult到底啥玩意儿*/
-            var items = await _todoItemService.GetIncompleteItemsAsync();
+            var items = await _todoItemService.GetIncompleteItemsAsync(currentUser);
             /*这里通过从接口那里获取的方法来对于数据库进行操作,获取结果集*/
             var model = new TodoViewModel() 
             {
@@ -38,11 +56,32 @@ namespace TodoList.Controllers {
                 return RedirectToAction("Index");//如果核验不通过则重定向回去
             }
 
-            var successful = await _todoItemService.AddItemAsync(newItem);
+            var currentUser = await _userManager.GetUserAsync(User);
+            var successful = await _todoItemService.AddItemAsync(newItem,currentUser);
+            /*就是获取用户名之后将其加入方法之中*/
 
             if (!successful) {
                 return BadRequest("can't add it");
                 //跳转到400 error page
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        /*用控制器调用多重封装过的方法,检验,逻辑,调用不放在同一层
+         IAction大概代表下一个对于页面的跳转操作
+         结构类似于上一个,都是标准版的包装方法*/
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkDone(Guid id) {
+            if (id == Guid.Empty) {
+                return RedirectToAction("Index");
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            var successful = await _todoItemService.MarkDoneAsync(id,user:currentUser);
+            
+            if (!successful) {
+                return BadRequest("悲");
             }
 
             return RedirectToAction("Index");

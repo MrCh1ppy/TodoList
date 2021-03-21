@@ -18,6 +18,9 @@ AddItem:出现了飘红,可能是后续的页面还没有编辑,看来这个asp-
 那么如果硬有呢?
 使用绑定模型作为中介,只获取需要的数据,随后和正常的数据进行再次赋值,可以将绑定模型的属性值改变成不同的,以此解耦
 或者为输入框单独绑定一个单独的模型,然后用这个模型,对于多个模型进行赋值
+
+label上面的asp-for 与 botton的type是可以省略的
+重复的asp-for?
 -->
 <form asp-action="AddItem" method="POST">
     <label asp-for="Title">Add a new item:</label>

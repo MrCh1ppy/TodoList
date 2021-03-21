@@ -4,6 +4,7 @@
 <!--下方的语句类似于提前将网页的名称定义好,用于显示-->
 <!--ViewData将网页需要的内容进行分门别类的保存以调用-->
 <!--在Nuget内部添加包的后缀名需要为.core-->
+<!--用一个hidden组件来获取被选中的记录的id,便于删除-->
 @{
     ViewData["Title"] = "Manage your todo list";
 }
@@ -20,10 +21,14 @@
             <td>Due</td>
         </tr>
         </thead>
+        <!--下面那个name='id'同样有个模式绑定,估计没有asp-name这玩意儿--->
         @foreach (var item in Model.Items) {
             <tr>
                 <td>
-                    <input type="checkbox" class="done-checkbox">
+                    <form asp-action="MarkDone" method="post">
+                        <input type="checkbox" class="done-checkbox">
+                        <input type="hidden" name="id" value="@item.Id">
+                    </form>
                 </td>
                 <td>@item.Title</td>
                 <td>@item.DueAt.Humanize()</td>
