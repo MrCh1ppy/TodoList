@@ -23,6 +23,7 @@ namespace TodoList.Controllers {
             _todoItemService = todoItemService;
             _userManager = userManager;
         }
+        /*依赖注入的意思大概就是框架帮你创建吧*/
 
         public async Task<IActionResult> Index() {
             var currentUser = await _userManager.GetUserAsync(User);

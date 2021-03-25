@@ -1,0 +1,42 @@
+﻿@using Humanizer
+@model ManageUsersViewModel
+<!--注意首字母小写-->
+
+@{
+    ViewData["Title"] = "Manage user";
+}
+
+<h2>@ViewData["Title"]</h2>
+<h3>Administrators</h3>
+
+<table class="table">
+    <thead>
+    <tr>
+    <td>ID</td>
+    <td>Email</td>
+    </tr>
+    </thead>
+
+@foreach (var user in Model.Administrators) {
+    <tr>
+        <td>@user.Id</td>
+        <td>@user.Email</td>
+    </tr>
+}
+</table>
+
+<h3>EveryOne</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <td>ID</td>
+        <td>Email</td>
+    </tr>
+    </thead>
+    @foreach (var user in Model.Everyone) {
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.Email</td>
+        </tr>
+    }
+</table>

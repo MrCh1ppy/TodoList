@@ -82,3 +82,4 @@ D:\CODE\C#\demo001\TodoList\TodoList\obj\Debug\net5.0\ref\TodoList.dll
 D:\CODE\C#\demo001\TodoList\TodoList\obj\Debug\net5.0\TodoList.pdb
 D:\CODE\C#\demo001\TodoList\TodoList\obj\Debug\net5.0\TodoList.genruntimeconfig.cache
 D:\CODE\C#\demo001\TodoList\TodoList\obj\Debug\net5.0\Razor\Views\Todo\AddItemPartial.cshtml.g.cs
+D:\CODE\C#\demo001\TodoList\TodoList\obj\Debug\net5.0\Razor\Views\ManagerUsers\Index.cshtml.g.cs
